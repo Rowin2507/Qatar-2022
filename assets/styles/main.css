@@ -1,0 +1,664 @@
+/* VARIABLES -------------------------------- */
+/* VARIABLES -------------------------------- */
+:root {
+    --font-headings: 'Qatar2022', sans-serif;
+    --font-regular: 'Outfit', sans-serif;
+
+    --color-white: #FFFFFF;
+    --color-white-ishOUD: #BFA8B0;
+    --color-white-ish: #a58490;
+    --color-black: #000000;
+
+    --color-red: #960f30;
+    --color-red2: #570d22;
+    --color-dark: #290216;
+    --color-green: green;
+
+    --multiple-opinions-items: 8;
+    --multiple-opinions-margin: 1.5em;
+    --multiple-opinions-width: 75vw;
+    --multiple-opinions-wrapper-width: calc((var(--multiple-opinions-width) + var(--multiple-opinions-margin)) * var(--multiple-opinions-items));
+    
+}
+
+
+
+/* FONTS -------------------------------- */
+/* FONTS -------------------------------- */
+@font-face {
+    font-family: 'Qatar2022';
+    src: url('../fonts/qatar2022/Qatar2022-Bold.woff2') format('woff2'),
+        url('../fonts/qatar2022/Qatar2022-Bold.woff') format('woff');
+    font-weight: 600;
+    font-style: normal;
+    font-display: swap;
+}
+@font-face {
+    font-family: 'Qatar2022';
+    src: url('../fonts/qatar2022/Qatar2022-Heavy.woff2') format('woff2'),
+        url('../fonts/qatar2022/Qatar2022-Heavy.woff') format('woff');
+    font-weight: 900;
+    font-style: normal;
+    font-display: swap;
+}
+
+
+
+/* RESET -------------------------------- */
+/* RESET -------------------------------- */
+*, *::after, *::before {
+  box-sizing: border-box;  
+  outline: none;
+  appearance: none;
+  margin: 0;
+  padding: 0;
+}
+
+
+
+/* GENERAL STYLING -------------------------------- */
+/* GENERAL STYLING -------------------------------- */
+html {
+    height: 100%;
+}
+body {
+    position: relative;
+    height: 100%;
+    width: 100%;
+    font-family: var(--font-regular);
+    color: var(--color-white);
+    background-color: var(--color-dark);
+    background-image: linear-gradient(135deg, rgba(150,15,48,1) 0%, rgba(41,2,22,1) 100%);
+    background-size: 100%;
+    background-position: center;
+    transition: background-size 250ms;
+    overflow: hidden;
+}
+body.tilting-locked {
+    /* background-image: linear-gradient(135deg, rgba(41,2,22,1) 0%, rgba(150,15,48,1) 100%); */
+    background-size: 500%;
+}
+
+/* body::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 2.5em;
+    width: 2.5em;
+    background-color: rgb(0 0 0 / 0.15);
+    border: 3px solid rgb(0 0 0 / 0.075);
+    border-radius: 50%;
+    z-index: 1000;
+} */
+
+
+main {
+    position: relative;
+    height: 100%;
+    width: 100%;
+}
+
+
+
+/* LANDING SCREEN -------------------------------- */
+/* LANDING SCREEN -------------------------------- */
+main > section:nth-of-type(1) {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    height: 100%;
+    width: 100%;
+
+    display: none; /* TIJDELIJK */
+}
+body.tilting-locked main > section:nth-of-type(1) {
+    display: none;
+}
+main > section:nth-of-type(1) figure {
+    display: grid;
+    place-items: center;
+}
+main > section:nth-of-type(1) figure img:first-of-type {
+    width: 6em;
+}
+main > section:nth-of-type(1) figure img:last-of-type {
+    margin-top: 2em;
+    width: 13em;
+}
+
+
+
+/* MULTIPLE THOUGHTS / OPINIONS -------------------------------- */
+/* MULTIPLE THOUGHTS / OPINIONS -------------------------------- */
+main > section.multiple-opinions {
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 100%;
+    width: 100%;
+    overflow: hidden;
+    opacity: 0;
+    transition: 1s;
+}
+body.tilting-locked main > section.multiple-opinions {
+    opacity: 1;
+}
+main > section.multiple-opinions ul {
+    list-style: none;
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    height: 97.5%;
+    perspective: 175vw; /* THE UL IS THE 3D ENVIRONMENT > SMALLER NUMBER ==  GREATER PERSPECTIVE EFFECT */
+    transform-style: preserve-3d;
+}
+main > section.multiple-opinions ul li {
+    position: absolute;
+    width: 77%;
+    height: 85%;
+    padding: 1.5em 1.65em;
+    border-radius: 1.75em;
+    background-color: rgb(0 0 0 / 0.175);
+    border: 0.25em solid rgb(0 0 0 / 0.05);
+    overflow: hidden;
+}
+main > section.multiple-opinions ul li::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    height: 100%;
+    width: 100%;
+    background-image: url('../images/test.svg');
+    background-size: 95%;
+    background-repeat: no-repeat;
+    background-position: 42.5% 95%;
+}
+main > section.multiple-opinions ul li h2 {
+    font-family: var(--font-headings);
+    font-size: 1.65em;
+    font-weight: 600;
+    margin-bottom: 0.25em;
+}
+main > section.multiple-opinions ul li p {
+    font-size: 1em;
+    font-weight: 400;
+    line-height: 1.5em;
+}
+main > section.multiple-opinions ul li div {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 100%;
+    width: 100%;
+    background-image: url('../branding/qatar-pattern-black.svg');
+    background-size: 10%;
+    background-repeat: repeat;
+    background-position: 0% 0%;
+    opacity: 0.075;
+    z-index: -1;
+    will-change: transform;
+}
+main > section.multiple-opinions section {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    height: 2em;
+    display: grid;
+    place-items: center;
+    margin-bottom: 0.75em;
+}
+main > section.multiple-opinions section img {
+    position: absolute;
+    height: 1.5em;
+    opacity: 1;
+    transition: 450ms;
+    transition-delay: 450ms;
+}
+body.tilting-warning main > section.multiple-opinions section img {
+    opacity: 0;
+    transition-delay: 0;
+}
+main > section.multiple-opinions section p {
+    position: absolute;
+    font-size: 0.85em;
+    opacity: 0;
+    transition: 450ms;
+}
+body.tilting-warning main > section.multiple-opinions section p {
+    opacity: 1;
+    transition-delay: 950ms;
+}
+
+
+
+/* FOOTBALL FIELD (FINALS) OF THOUGHTS / OPINIONS -------------------------------- */
+/* FOOTBALL FIELD (FINALS) OF THOUGHTS / OPINIONS -------------------------------- */
+main > section.football-field {
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 100%;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    opacity: 1;
+    transition: 1s;
+} 
+body.tilting-locked main > section.football-field {
+    opacity: 0;
+}
+main > section.football-field > div {
+    width: 100%;
+}
+main > section.football-field > div:nth-of-type(1),
+main > section.football-field > div:nth-of-type(3) {
+    height: 100%;
+}
+/* FIELD */
+main > section.football-field > div:nth-of-type(2) {
+    position: relative;
+    width: 90%;
+    aspect-ratio: 1 / 1.4;
+    border: 0.1em solid var(--color-white-ish);
+    background-image: repeating-linear-gradient(
+		0deg,
+		rgb(0 0 0 / 0.1),
+		rgb(0 0 0 / 0.1) 5%,
+		transparent 5%,
+		transparent 10%
+	);
+	background-size: 100%;
+	background-position: center;
+    background-repeat: no-repeat;
+}
+main > section.football-field > div:nth-of-type(2)::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 50%;
+    height: 0.1em;
+    width: 100%;
+    background-color: var(--color-white-ish);
+    transform: translateY(-50%);
+}
+main > section.football-field > div:nth-of-type(2)::after {
+    content: '';
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    height: 112%;
+    width: 106.5%;
+    background-color: rgb(0 0 0 / 0.175);
+    border: 0.25em solid rgb(0 0 0 / 0.025);
+    border-radius: 0.85em;
+    transform: translate(-50%, -50%);
+    z-index: -1;
+}
+/* GOAL SECTION TOP */
+main > section.football-field > div:nth-of-type(2) > div:nth-of-type(1) {
+    position: absolute;
+    left: 50%;
+    top: 0;
+    width: 67.5%;
+    aspect-ratio: 2.4 / 1;
+    border: 0.1em solid var(--color-white-ish);
+    border-top: none;
+    transform: translateX(-50%);
+}
+main > section.football-field > div:nth-of-type(2) > div:nth-of-type(1)::before {
+    content: '';
+    position: absolute;
+    left: 50%;
+    top: 0;
+    width: 55%;
+    aspect-ratio: 3 / 1;
+    border: 0.1em solid var(--color-white-ish);
+    border-top: none;
+    transform: translateX(-50%);
+}
+main > section.football-field > div:nth-of-type(2) > div:nth-of-type(1)::after {
+    content: '';
+    position: absolute;
+    left: 50%;
+    bottom: 25%;
+    width: 0.3em;
+    aspect-ratio: 1 / 1;
+    border-radius: 50%;
+    background-color: var(--color-white-ish);
+    transform: translateX(-50%);
+}
+main > section.football-field > div:nth-of-type(2) > div:nth-of-type(1) > div {
+    position: absolute;
+    left: 50%;
+    top: 0;
+    width: 27.5%;
+    aspect-ratio: 3 / 1;
+    border: 0.1em solid var(--color-white-ish);
+    border-bottom: none;
+    transform: translate(-50%, -100%);
+}
+main > section.football-field.scored-top > div:nth-of-type(2) > div:nth-of-type(1) > div {
+    border: 0.1em solid var(--color-green);
+    border-bottom: none;
+}
+main > section.football-field > div:nth-of-type(2) > div:nth-of-type(1) > span {
+    position: absolute;
+    display: block;
+    left: 50%;
+    bottom: 0;
+    height: 100%;
+    aspect-ratio: 1 / 1;
+    transform: translate(-50%, 100%);
+    overflow: hidden;
+}
+main > section.football-field > div:nth-of-type(2) > div:nth-of-type(1) > span::before {
+    content: '';
+    position: absolute;
+    left: 50%;
+    bottom: 0;
+    height: 95%;
+    aspect-ratio: 1 / 1;
+    border: 0.1em solid var(--color-white-ish);
+    border-radius: 50%;
+    transform: translate(-50%, -82.5%);
+}
+/* CIRCLE */
+main > section.football-field > div:nth-of-type(2) > div:nth-of-type(2) {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 27.5%;
+    aspect-ratio: 1 / 1;
+    border: 0.1em solid var(--color-white-ish);
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+}
+main > section.football-field.scored > div:nth-of-type(2) > div:nth-of-type(2) {
+    border: 0.1em solid var(--color-green);
+}
+main > section.football-field > div:nth-of-type(2) > div:nth-of-type(2)::before {
+    content: '';
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    height: 0.375em;
+    aspect-ratio: 1 / 1;
+    background-color: var(--color-white-ish);
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+}
+/* GOAL SECTION BOTTOM */
+main > section.football-field > div:nth-of-type(2) > div:nth-of-type(3) {
+    position: absolute;
+    left: 50%;
+    bottom: 0;
+    width: 67.5%;
+    aspect-ratio: 2.4 / 1;
+    border: 0.1em solid var(--color-white-ish);
+    border-bottom: none;
+    transform: translateX(-50%);
+}
+main > section.football-field > div:nth-of-type(2) > div:nth-of-type(3)::before {
+    content: '';
+    position: absolute;
+    left: 50%;
+    bottom: 0;
+    width: 55%;
+    aspect-ratio: 3 / 1;
+    border: 0.1em solid var(--color-white-ish);
+    border-bottom: none;
+    transform: translateX(-50%);
+}
+main > section.football-field > div:nth-of-type(2) > div:nth-of-type(3)::after {
+    content: '';
+    position: absolute;
+    left: 50%;
+    top: 25%;
+    width: 0.3em;
+    aspect-ratio: 1 / 1;
+    border-radius: 50%;
+    background-color: var(--color-white-ish);
+    transform: translateX(-50%);
+}
+main > section.football-field > div:nth-of-type(2) > div:nth-of-type(3) > div {
+    position: absolute;
+    left: 50%;
+    bottom: 0;
+    width: 27.5%;
+    aspect-ratio: 3 / 1;
+    border: 0.1em solid var(--color-white-ish);
+    border-top: none;
+    transform: translate(-50%, 100%);
+    transition: 350ms;
+}
+main > section.football-field.scored-bottom > div:nth-of-type(2) > div:nth-of-type(3) > div {
+    border: 0.1em solid var(--color-green);
+    border-top: none;
+}
+main > section.football-field > div:nth-of-type(2) > div:nth-of-type(3) > span {
+    position: absolute;
+    display: block;
+    left: 50%;
+    top: 0;
+    height: 100%;
+    aspect-ratio: 1 / 1;
+    transform: translate(-50%, -100%);
+    overflow: hidden;
+}
+main > section.football-field > div:nth-of-type(2) > div:nth-of-type(3) > span::before {
+    content: '';
+    position: absolute;
+    left: 50%;
+    top: 0;
+    height: 95%;
+    aspect-ratio: 1 / 1;
+    border: 0.1em solid var(--color-white-ish);
+    border-radius: 50%;
+    transform: translate(-50%, 82.5%);
+}
+/* CORNER FLAGS */
+main > section.football-field > div:nth-of-type(2) > span {
+    position: absolute;
+    width: 8.5%;
+    aspect-ratio: 1 / 1;
+    overflow: hidden;
+}
+main > section.football-field > div:nth-of-type(2) > span:nth-of-type(1) {
+    left: 0;
+    top: 0;
+}
+main > section.football-field > div:nth-of-type(2) > span:nth-of-type(2) {
+    right: 0;
+    top: 0;
+}
+main > section.football-field > div:nth-of-type(2) > span:nth-of-type(3) {
+    right: 0;
+    bottom: 0;
+}
+main > section.football-field > div:nth-of-type(2) > span:nth-of-type(4) {
+    left: 0;
+    bottom: 0;
+}
+main > section.football-field > div:nth-of-type(2) > span::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 100%;
+    aspect-ratio: 1 / 1;
+    box-shadow: inset 0 0 0 0.1em var(--color-white-ish);
+    border-radius: 50%;
+}
+main > section.football-field > div:nth-of-type(2) > span:nth-of-type(1):before {
+    transform: translate(-50%, -50%); 
+}
+main > section.football-field > div:nth-of-type(2) > span:nth-of-type(2):before {
+    transform: translate(50%, -50%); 
+}
+main > section.football-field > div:nth-of-type(2) > span:nth-of-type(3):before {
+    transform: translate(50%, 50%); 
+}
+main > section.football-field > div:nth-of-type(2) > span:nth-of-type(4):before {
+    transform: translate(-50%, 50%); 
+}
+/* FOOTBALL */
+#ball {
+    position: absolute;
+    left: calc(50% - 10px);
+    top: 15%;
+    height: 20px;
+	width: 20px;
+    background-color: var(--color-white);
+    border-radius: 50%;
+    box-shadow: 0 0 0.5em rgb(0 0 0 / 0.35);
+    z-index: 100;
+    will-change: transform;
+    overflow: hidden;
+}
+#ball > div {
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 100%;
+    width: 100%;
+    background-image: url('../images/ball-graphics.svg');
+    background-size: 99.99%;
+    background-repeat: repeat;
+    background-position: 0% 0%;
+    will-change: transform;
+}
+
+
+/* SENSORS PERMISSION OVERLAY -------------------------------- */
+/* SENSORS PERMISSION OVERLAY -------------------------------- */
+main > section.sensors-permission-overlay {
+    position: fixed;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    left: 0;
+    top: 0;
+    height: 100%;
+    width: 100%;
+    padding: 0 1.5em;
+    background-color: rgb(0 0 0 / 0.75);
+    backdrop-filter: blur(0.75em) saturate(115%);
+    -webkit-backdrop-filter: blur(0.75em);
+    color: rgb(255 255 255 / 0.75);
+    text-align: center;
+    transition: 350ms;
+    z-index: 999;
+}
+body.sensors-allowed main > section.sensors-permission-overlay {
+    opacity: 0;
+    visibility: hidden;
+}
+main > section.sensors-permission-overlay h2 {
+    margin-top: 1.75em;
+    font-family: var(--font-headings);
+    font-size: 2em;
+    font-weight: 600;
+}
+main > section.sensors-permission-overlay p {
+    margin-top: 1em;
+    font-size: 1em;
+    font-weight: 400;
+    line-height: 1.5em;
+    flex: 1;
+}
+main > section.sensors-permission-overlay button {
+    position: relative;
+    display: flex;
+    flex-direction: row;
+    justify-self: flex-end;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 1em;
+    padding: 1.25em 1.45em;
+    border-radius: 0.75em;
+    background-color: rgb(255 255 255 / 0.035);
+    font-family: var(--font-regular);
+    font-size: 1em;
+    font-weight: 600;
+    color: rgb(255 255 255 / 0.75);
+    border: 3px solid rgb(255 255 255 / 0.035);
+    transition: 350ms;
+    cursor: pointer;
+}
+main > section.sensors-permission-overlay button::after {
+    content: 'Gebruik afgewezen';
+    position: absolute;
+    left: 4.5em;
+    bottom: 0.8em;
+    font-size: 0.8em;
+    font-weight: 400;
+    color: var(--color-red);
+    opacity: 0;
+    transition: 350ms;
+    transition-delay: 150ms;
+}
+main > section.sensors-permission-overlay button:hover {
+    background-color: rgb(255 255 255 / 0.05);
+    border: 3px solid rgb(255 255 255 / 0.045);
+}
+main > section.sensors-permission-overlay button svg {
+    height: 1em;
+    margin-right: 1em;
+}
+main > section.sensors-permission-overlay button svg path {
+    fill: rgb(255 255 255 / 0.75);
+}
+main > section.sensors-permission-overlay button span {
+    display: block;
+    width: 100%;
+}
+main > section.sensors-permission-overlay p:last-of-type {
+    flex: unset;
+    font-size: 0.85em;
+    font-weight: 300;
+    opacity: 0.35;
+}
+main > section.sensors-permission-overlay strong {
+    margin-top: 3.5em;
+    margin-bottom: 1.5em;
+    opacity: 0.15;
+    font-weight: 700;
+}
+body.sensors-denied main > section.sensors-permission-overlay {
+    background-color: rgb(0 0 0 / 0.85);
+}
+body.sensors-denied main > section.sensors-permission-overlay button {
+    padding: 0.75em 1.45em 2em 1.45em;
+}
+body.sensors-denied main > section.sensors-permission-overlay button::after {
+    opacity: 1;
+}
+body.sensors-denied main > section.sensors-permission-overlay p:last-of-type {
+    animation-name: sensors-permission-pulse;
+    animation-duration: 2s;
+    animation-iteration-count: infinite;
+}
+
+
+
+/* KEYFRAMES -------------------------------- */
+/* KEYFRAMES -------------------------------- */
+@keyframes sensors-permission-pulse {
+    0%, 100% {
+        opacity: 0.35;
+    }
+    50% {
+        opacity: 1;
+    }
+}
