@@ -1,45 +1,53 @@
+// GLOBAL VARIABLES --------------------------------
+// GLOBAL VARIABLES --------------------------------
+
+// GENERAL
 var body = document.querySelector("body");
 var bodyAfter = document.querySelector("body::after");
+
+// LANDING
+var landingSnapPoint = 65;
+var landingLogo = document.querySelector("main > section:nth-of-type(1) figure");
+
+// MULTIPLE OPINIIONS
+var multipleOpinionsAmount = 8;
+var multipleOpinionsOffset = 360 / multipleOpinionsAmount;
+var multipleOpinions = document.querySelectorAll("main > section.multiple-opinions ul li");
+var multipleOpinionsBG = document.querySelectorAll("main > section.multiple-opinions ul li div");
+
+// FOOTBALL FIELD
+var ballDiameter = 20;
+var footballField = document.querySelector("main > section.football-field");
+var ball = document.querySelector("#ball");
+var ballGraphics = document.querySelector("#ball > div");
+var goalTop = document.querySelector("main > section.football-field > div:nth-of-type(2) > div:nth-of-type(1) > div");
+var goalBottom = document.querySelector("main > section.football-field > div:nth-of-type(2) > div:nth-of-type(3) > div");
+
+
 
 // DEVICE MOTION FUNCTIONS (GYROSCOPE + COMPASS) --------------------------------
 // DEVICE MOTION FUNCTIONS (GYROSCOPE + COMPASS) --------------------------------
 function permission () {
+    // DEVICE MOTION --------------------------------
     if ( typeof( DeviceMotionEvent ) !== "undefined" && typeof( DeviceMotionEvent.requestPermission ) === "function" ) {
         // (optional) Do something before API request prompt.
         DeviceMotionEvent.requestPermission()
             .then( response => {
-            // (optional) Do something after API prompt dismissed.
+            // IF PERMISSION IS DENIED
+            body.classList.add("sensors-denied");
+
             if ( response == "granted" ) {
                 window.addEventListener( "devicemotion", (e) => {
 
                     // IF PERMISSION IS GIVEN, HIDE OVERLAY
                     body.classList.add("sensors-allowed");
-                    
-                    // // alert( "DeviceMotionEvent is defined" );
-                    // var detailedtiltDeviceX = e.accelerationIncludingGravity.x;
-                    // var detailedtiltDeviceY = e.accelerationIncludingGravity.y;
-                    // var detailedtiltDeviceZ = e.accelerationIncludingGravity.z;
 
-                    // var tiltDeviceX = Math.round(detailedtiltDeviceX * 10) / 10;
-                    // // var tiltDeviceXRounded = Math.round(detailedtiltDeviceX);
-                    
-                    
-                    // console.log(tiltDeviceX);
-                    // // console.log(accelerationTiltDeviceX);
-
-                    
-
-
-                    
-
-
+                    // GET WINDOW HEIGHT AND WIDTH
+                    var windowWidth = document.documentElement.clientWidth;
+                    var windowHeight = document.documentElement.clientHeight;
 
                     
                     // MOVE BALL BASED ON SENSOR DATA --------------------------------
-                    var ball = document.getElementById("ball");
-                    var ballDiameter = 40;
-                    var windowWidth = document.documentElement.clientWidth;
-                    var windowHeight = document.documentElement.clientHeight;
                     console.log("Breedte: " + windowWidth + " Hoogte: " + windowHeight);
 
                     // GET DATA FROM GYRO SENSORS
@@ -58,23 +66,95 @@ function permission () {
                     var velocityY = 0;
                     velocityX += accelerationX;
                     velocityY -= accelerationY;
-                    velocityX *= 2.5;
-                    velocityY *= 2.5;
+                    velocityX *= 3.5;
+                    velocityY *= 3.5;
 
                     // CHANGE BALL POSITION
                     positionX = positionX + velocityX;
                     positionY = positionY + velocityY;
 
+                    // POSITIONS AND WIDTH (TOP GOAL)
+                    var goalTopPositionX = goalTop.getBoundingClientRect().left;
+                    var goalTopPositionY = goalTop.getBoundingClientRect().top;
+                    var goalTopWidth = goalTop.getBoundingClientRect().width;
+                    var goalTopPositionXAndWidth = goalTopPositionX + goalTopWidth;
+                    var goalTopPositionXAndBallCorrection = goalTopPositionXAndWidth - ballDiameter;
+                    var goalTopHeight = goalTop.getBoundingClientRect().height;
+                    var goalTopPositionYAndHeight = goalTopPositionY + goalTopHeight;
+                    var goalTopPositionYAndBallCorrection = goalTopPositionYAndHeight - ballDiameter;
+
+                    // POSITIONS AND WIDTH (BOTTOM GOAL)
+                    var goalBottomPositionX = goalBottom.getBoundingClientRect().left;
+                    var goalBottomPositionY = goalBottom.getBoundingClientRect().top;
+                    var goalBottomWidth = goalBottom.getBoundingClientRect().width;
+                    var goalBottomPositionXAndWidth = goalBottomPositionX + goalBottomWidth;
+                    var goalBottomPositionXAndBallCorrection = goalBottomPositionXAndWidth - ballDiameter;
+                    var goalBottomHeight = goalBottom.getBoundingClientRect().height;
+                    var goalBottomPositionYAndHeight = goalBottomPositionY + goalBottomHeight;
+                    var goalBottomPositionYAndBallCorrection = goalBottomPositionYAndHeight - ballDiameter;
+
+                    // GOAL TOP
+                    if (positionX > goalTopPositionX && positionX < goalTopPositionXAndBallCorrection) {
+
+                        // TOP COLLISION
+                        if (positionY < goalTopPositionY && positionY <= (goalTopPositionYAndHeight + ballDiameter)) {
+                            // ADD CLASS TO PARENT
+                            footballField.classList.add("scored");
+                            footballField.classList.add("scored-top");
+                            footballField.classList.remove("scored-bottom");
+                            
+                            // LOCK POSITION (X)
+                            positionX = (windowWidth / 2) - (ballDiameter / 2);
+                            velocityX *= -1;
+
+                            // LOCK POSITION (Y)
+                            positionY = goalTopPositionYAndBallCorrection;
+                            velocityY *= -1;
+
+                            console.log("GOAALLL | Bottom goal");                            
+                        }
+                    }
+                    
+
+                    // GOAL BOTTOM
+                    if (positionX > goalBottomPositionX && positionX < goalBottomPositionXAndBallCorrection) {
+
+                        // BOTTOM COLLISION
+                        if (positionY > goalBottomPositionY && positionY <= (goalBottomPositionYAndHeight + ballDiameter)) {
+                            // ADD CLASS TO PARENT
+                            footballField.classList.add("scored");
+                            footballField.classList.add("scored-bottom");
+                            footballField.classList.remove("scored-top");
+                            
+                            // LOCK POSITION (X)
+                            positionX = (windowWidth / 2) - (ballDiameter / 2);
+                            velocityX *= -1;
+
+                            // LOCK POSITION (Y)
+                            positionY = goalBottomPositionYAndBallCorrection;
+                            velocityY *= -1;
+
+                            console.log("GOAALLL | Bottom goal");                            
+                        }
+                    }
+                    
+
+
+                    
+
+
+                    // CHECK BOUNDS
                     checkFieldBounds();
 
                     ball.style.left = positionX + 'px';
                     ball.style.top = positionY + 'px';
+                    
 
                     console.log("Balpositie X: " + positionX);
                     console.log("Balpositie Y: " + positionY);
-                    console.log(gravity);
+                    // console.log(gravity);
                     
-                    // CHECK IF BALL IS NEAR BORDERS OF FIELD / SCREEN
+                    // CHECK IF BALL IS NEAR BORDERS OF FIELD / SCREEN 
                     function checkFieldBounds() {
                         if (positionX < 0 ) {
                             positionX = 0;
@@ -95,22 +175,91 @@ function permission () {
                     }
 
 
+                    // GOAL FUNCTIONS --------------------------------
+                    // CHECK IF SCORED (BOTTOM GOAL)
+                    function checkGoalBottom() {
+                        if (positionX > (goalBottomPositionX + 1) && positionX < (goalBottomPositionXAndBallCorrection - 1)) {
 
-                    // BALL TEST --------------------------------
-                    // var ball = document.getElementById("ball");
-                    // var diameter = 40;
+                            // BOTTOM COLLISION
+                            if (positionY > goalBottomPositionY && positionY < (goalBottomPositionYAndHeight + ballDiameter)) {
+                                positionY = goalBottomPositionYAndBallCorrection;
+                                velocityY *= -1;
+                                console.log("GOAAL");
 
-                    // var gravity = e.accelerationIncludingGravity;
-                    // console.log(gravity.x);
+                                // LEFT COLLISION
+                                if (positionX <= (goalBottomPositionX + 10)) {
+                                    positionX = goalBottomPositionX + 10;
+                                    velocityX *= -1;
+                                    positionY = goalBottomPositionYAndBallCorrection;
+                                    velocityY *= -1;
+                                }
+                            }
 
-                    // var positionX = ball.offsetLeft;
-                    // var positionY = ball.offsetTop;
 
-                    // console.log("X: " + positionX + " - Y: " + positionY);
+                            // if (positionY > goalBottomPositionY && positionY < goalBottomPositionYAndHeight) {
+                            //     footballField.classList.add("scored-bottom");
 
-                    // ball.style.transform = "translateX(calc(" + (gravity.x * 5) + "vw - 50%)) translateY(calc(" + (gravity.y * -5) + "vh - 50%))";
+                            //     // KEEP BALL IN GOAL
+                            //     positionY = goalBottomPositionYAndBallCorrection;
+                            //     velocityY = 0;
+                            //     accelerationY = 0;
+                            //     // gravity = 0;
+
+
+                            //     // var positionXRounded = Math.round(positionX);
+                            //     // var goalBottomPositionXRounded = Math.round(goalBottomPositionX);
+                            //     if (positionX <= goalBottomPositionX) {
+
+                            //         console.log("MAN " + positionX);
+
+                            //         positionX = positionX + 0;
+                            //         positionY = positionY + 0;
+
+                            //         positionX = 180;
+                            //         velocityX *= -1;
+                            //         // accelerationX = 0;
+
+
+                            //         console.log("LOCKKKK NUUUUUU : " + positionXRounded +  ' & ' + goalBottomPositionXRounded);
+
+                            //     }
+
+
+                                
+                            // }
+                            // else {
+                            //     // footballField.classList.remove("scored-bottom");
+                            // }
+                            // footballField.classList.add("scored-bottom");
+                        } 
+
+
+                        
+
+
+                        console.log(goalBottomPositionX + " / " + goalBottomPositionXAndWidth);
+                    }
+
                     
 
+
+                    
+
+
+
+
+
+                    // GOAL FUNCTIONS
+                    
+
+
+                    // CHANGE BALL GRAPHICS, BASED ON POSITION --------------------------------
+                    var ballGraphicsX = positionX * 4250;
+                    var ballGraphicsY = positionY * -10;
+                    ballGraphics.style.backgroundPosition = ballGraphicsX + "% " + ballGraphicsY + "%";
+
+
+        
 
 
                 });
@@ -122,65 +271,105 @@ function permission () {
     }
 
 
-
+    // DEVICE ORIENTATION --------------------------------
     if ( typeof( DeviceOrientationEvent ) !== "undefined" && typeof( DeviceOrientationEvent.requestPermission ) === "function" ) {
-                // (optional) Do something before API request prompt.
-                DeviceOrientationEvent.requestPermission()
-                    .then( response => {
-                    // (optional) Do something after API prompt dismissed.
-                    if ( response == "granted" ) {
-                        window.addEventListener( "deviceorientation", (e) => {
-                            // do something for 'e' here.
-                            
-                                var alpha = e.alpha;
-                                var beta = e.beta;
-                                var gamma = e.gamma;
-                                // console.log('Orientation - Alpha: '+alpha+', Beta: '+beta+', Gamma: '+gamma);
-                                // console.log("Richting (Z): " + alpha);
-                              
-        
-                                if (alpha >= 0) {
-                                    body.style.backgroundColor = "red";
-                                }
-                                if (alpha >= 90) {
-                                    body.style.backgroundColor = "green";
-                                }
-                                if (alpha >= 180) {
-                                    body.style.backgroundColor = "blue";
-                                }
-                                if (alpha >= 270) {
-                                    body.style.backgroundColor = "yellow";
-                                }
-        
-                                var test = document.querySelector("main > section:nth-of-type(1) div");
-                                test.style.transform = "rotate(" + alpha + "deg)";
-        
-        
-                                if (beta >= 65) {
-                                    body.classList.add("tilting-locked");
-                                    body.style.backgroundColor = "black";
-                                } else {
-                                    body.classList.remove("tilting-locked")
-                                }
-                                
-        
-        
-        
-        
-        
-                                
-        
-        
-        
-                        });
+        // (optional) Do something before API request prompt.
+        DeviceOrientationEvent.requestPermission()
+            .then( response => {
+            // (optional) Do something after API prompt dismissed.
+    
+            if ( response == "granted" ) {
+                window.addEventListener( "deviceorientation", (e) => {
+
+                    // GET WINDOW HEIGHT AND WIDTH
+                    // var windowWidth = document.documentElement.clientWidth;
+                    // var windowHeight = document.documentElement.clientHeight;
+
+                    // GET ROTATION VALUES
+                    var rotateZ = e.alpha; // 0 TO 360 DEG
+                    var rotateX = e.beta; // -180 TO 180 DEG
+                    var rotateY = e.gamma; // -90 TO 90 DEG
+
+                    // ADJUST ROTATION VALUES (NO DECIMALS)
+                    var rotateZRounded = Math.round(rotateZ);
+                    var rotateXRounded = Math.round(rotateX);
+                    var rotateYRounded = Math.round(rotateY);
+                    // console.log(rotateZRounded);
+
+                
+                    // if (alpha >= 0) {
+                    //     body.style.backgroundColor = "red";
+                    //     // multipleOpinions.classList.remove("rotate");
+                    // }
+                    // if (alpha >= 90) {
+                    //     body.style.backgroundColor = "green";
+                    // }
+                    // if (alpha >= 180) {
+                    //     body.style.backgroundColor = "blue";
+                    //     // multipleOpinions.classList.add("rotate");
+                    // }
+                    // if (alpha >= 270) {
+                    //     body.style.backgroundColor = "yellow";
+                    // }
+
+                    // var yep = ((rotateX * rotateX) * 0.003) * 2;
+                    // landingLogo.style.transform = "translateY(" + yep + "vh)";
+
+                    var landingLogoOpacityData = rotateX / landingSnapPoint;
+                    var landingLogoOpacity = 100 - (landingLogoOpacityData * 100);
+
+                    landingLogo.style.opacity = landingLogoOpacity + "%";
+                    // console.log(landingLogoOpacity);
+
+
+                    if (rotateX >= landingSnapPoint) {
+                        body.classList.add("tilting-locked");
+                        // body.style.backgroundColor = "white";
+                    } else {
+                        // body.classList.remove("tilting-locked");
+                        // body.style.backgroundColor = "black";
                     }
-                })
-                .catch( console.error )
-            } else {
-                alert( "DeviceMotionEvent is not defined" );
+
+                    
+                    // TILTING WARNING (X-ROTATION TO MUCH FOR ACCURATE READING) --------------------------------
+                    if (rotateX >= 80) {
+                        body.classList.add("tilting-warning");
+                    } else {
+                        body.classList.remove("tilting-warning");
+                    }
+
+
+                    // MULTIPLE OPINIIONS (3D CAROUSEL) --------------------------------
+                    for (var i = 0; i < multipleOpinions.length; i++) {
+                        // 3D CUBE EFFECT (CHANGE ON DIRECTION)
+                        var multipleOpinionsIndex = i + 1;
+                        var multipleOpinionsFullRotation = rotateZ * -0.5;
+                        var multipleOpinionsSpecificOffset = multipleOpinionsOffset * multipleOpinionsIndex;
+                        var multipleOpinionsSpecificRotation = multipleOpinionsFullRotation + multipleOpinionsSpecificOffset;
+                        multipleOpinions[i].style.transform = "translateZ(100vw) rotateY(" + multipleOpinionsSpecificRotation + "deg) translateZ(100vw) rotateX(180deg) rotateZ(180deg)";
+                        
+                        // BACKGROUND PATTERN PARALLAX EFFECT
+                        var multipleOpinionsBGPositionX = (rotateZRounded / 360) * -100;
+                        var multipleOpinionsBGPositionY = (rotateXRounded / 180) * -12.5;
+                        multipleOpinionsBG[i].style.backgroundPosition = multipleOpinionsBGPositionX + "% " + multipleOpinionsBGPositionY + "%";
+                        // console.log("BG Pattern: (X)" + multipleOpinionsBGPositionX + " (Y) " + multipleOpinionsBGPositionY);
+                    }
+ 
+                    
+
+                });
             }
+        })
+        .catch( console.error )
+    } else {
+        alert( "DeviceMotionEvent is not defined" );
+    }
 }
 
+
+// REQUEST SENSOR PERMISSION ON BUTTON CLICK 
+var permissionRequestButton = document.querySelector("main > section.sensors-permission-overlay button");
+permissionRequestButton.addEventListener( "click", permission);
 
 
 // GET USER INFO (IPHONE ONLY)
@@ -200,81 +389,19 @@ function switchUserInfo() {
 
 function iOSversion() {
     if (/iP(hone|od|ad)/.test(navigator.platform)) {
-      var ios = (navigator.appVersion).match(/OS (\d+)_(\d+)_?(\d+)?/);
-      return [parseInt(ios[1], 10), parseInt(ios[2], 10), parseInt(ios[3] || 0, 10)];
+        var ios = (navigator.appVersion).match(/OS (\d+)_(\d+)_?(\d+)?/);
+        return [parseInt(ios[1], 10), parseInt(ios[2], 10), parseInt(ios[3] || 0, 10)];
     }
-  }
+}
   
 
-
-
-
-
-
-
-// // DEVICE MOTION FUNCTIONS (GYROSCOPE + COMPASS)
-// function permission () {
-//     if ( typeof( DeviceOrientationEvent ) !== "undefined" && typeof( DeviceOrientationEvent.requestPermission ) === "function" ) {
-//         // (optional) Do something before API request prompt.
-//         DeviceOrientationEvent.requestPermission()
-//             .then( response => {
-//             // (optional) Do something after API prompt dismissed.
-//             if ( response == "granted" ) {
-//                 window.addEventListener( "deviceorientation", (e) => {
-//                     // do something for 'e' here.
-                    
-//                         var alpha = e.alpha;
-//                         var beta = e.beta;
-//                         var gamma = e.gamma;
-//                         // console.log('Orientation - Alpha: '+alpha+', Beta: '+beta+', Gamma: '+gamma);
-//                         console.log("Richting (Z): " + alpha);
-                      
-
-//                         if (alpha >= 0) {
-//                             body.style.backgroundColor = "red";
-//                         }
-//                         if (alpha >= 90) {
-//                             body.style.backgroundColor = "green";
-//                         }
-//                         if (alpha >= 180) {
-//                             body.style.backgroundColor = "blue";
-//                         }
-//                         if (alpha >= 270) {
-//                             body.style.backgroundColor = "yellow";
-//                         }
-
-//                         var test = document.querySelector("main > section:nth-of-type(1) div");
-//                         test.style.transform = "rotate(" + alpha + "deg)";
-
-
-
-                        
-
-
-
-
-
-
-
-
-
-//                 });
-//             }
-//         })
-//         .catch( console.error )
-//     } else {
-//         alert( "DeviceMotionEvent is not defined" );
-//     }
-// }
-
-
-var permissionRequestButton = document.querySelector("main > section.sensors-permission-overlay button");
-permissionRequestButton.addEventListener( "click", permission);
-
-
-
-
-// CLEAR CONSOLE LOG EVERY SECOND > PERFORMANCE ISSUES
+// CLEAR CONSOLE LOG EVERY SECOND > FIXING PERFORMANCE ISSUES
 setInterval(function(){
     console.clear();
 }, 1000); 
+
+
+
+
+
+
