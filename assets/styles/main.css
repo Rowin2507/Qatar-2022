@@ -27,16 +27,16 @@
 /* FONTS -------------------------------- */
 @font-face {
     font-family: 'Qatar2022';
-    src: url('/assets/fonts/qatar2022/Qatar2022-Bold.woff2') format('woff2'),
-        url('/assets/fonts/qatar2022/Qatar2022-Bold.woff') format('woff');
+    src: url('../fonts/qatar2022/Qatar2022-Bold.woff2') format('woff2'),
+        url('../fonts/qatar2022/Qatar2022-Bold.woff') format('woff');
     font-weight: 600;
     font-style: normal;
     font-display: swap;
 }
 @font-face {
     font-family: 'Qatar2022';
-    src: url('/assets/fonts/qatar2022/Qatar2022-Heavy.woff2') format('woff2'),
-        url('/assets/fonts/qatar2022/Qatar2022-Heavy.woff') format('woff');
+    src: url('../fonts/qatar2022/Qatar2022-Heavy.woff2') format('woff2'),
+        url('../fonts/qatar2022/Qatar2022-Heavy.woff') format('woff');
     font-weight: 900;
     font-style: normal;
     font-display: swap;
@@ -173,7 +173,7 @@ main > section.multiple-opinions ul li::after {
     bottom: 0;
     height: 100%;
     width: 100%;
-    background-image: url('/assets/images/test.svg');
+    background-image: url('../images/test.svg');
     background-size: 95%;
     background-repeat: no-repeat;
     background-position: 42.5% 95%;
@@ -196,7 +196,7 @@ main > section.multiple-opinions ul li div {
     top: 0;
     height: 100%;
     width: 100%;
-    background-image: url('/assets/branding/qatar-pattern-black.svg');
+    background-image: url('../branding/qatar-pattern-black.svg');
     background-size: 10%;
     background-repeat: repeat;
     background-position: 0% 0%;
@@ -531,7 +531,7 @@ main > section.football-field > div:nth-of-type(2) > span:nth-of-type(4):before 
     top: 0;
     height: 100%;
     width: 100%;
-    background-image: url('/assets/images/ball-graphics.svg');
+    background-image: url('../images/ball-graphics.svg');
     background-size: 99.99%;
     background-repeat: repeat;
     background-position: 0% 0%;
