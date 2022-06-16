@@ -7,13 +7,25 @@ var bodyAfter = document.querySelector("body::after");
 
 // LANDING
 var landingSnapPoint = 65;
+var landing = document.querySelector("main > section:nth-of-type(1)");
 var landingLogo = document.querySelector("main > section:nth-of-type(1) figure");
+var landingBG = document.querySelector("main > section:nth-of-type(1) div");
+var landingH3 = document.querySelector("main > section:nth-of-type(1) h3");
+var landingP = document.querySelector("main > section:nth-of-type(1) p");
 
 // MULTIPLE OPINIIONS
 var multipleOpinionsAmount = 8;
 var multipleOpinionsOffset = 360 / multipleOpinionsAmount;
+var multipleOpinionsSection = document.querySelector("main > section.multiple-opinions");
 var multipleOpinions = document.querySelectorAll("main > section.multiple-opinions ul li");
 var multipleOpinionsBG = document.querySelectorAll("main > section.multiple-opinions ul li div");
+var multipleOpinionsBGLogoHint = document.querySelector("main > section.multiple-opinions section");
+var shortOpnions = [
+    "De omstreden mensenrechten in Qatar verdienen geen wereldwijd podium.",
+    "Voetbal heeft de kracht om landen en volken te verbinden. Niet deelnemen, zal al helemaal niets veranderen aan de omstandigheden in Qatar.",
+    "Het is beter om wel naar Qatar te gaan en druk uit te oefenen op de autoriteiten voor hervormingen.",
+    "De kosten van €30 miljard om airco-gekoelde stadions te bouwen, is volstrekt absurd met de huidige klimaatcrisis."
+];
 
 // FOOTBALL FIELD
 var ballDiameter = 20;
@@ -22,6 +34,14 @@ var ball = document.querySelector("#ball");
 var ballGraphics = document.querySelector("#ball > div");
 var goalTop = document.querySelector("main > section.football-field > div:nth-of-type(2) > div:nth-of-type(1) > div");
 var goalBottom = document.querySelector("main > section.football-field > div:nth-of-type(2) > div:nth-of-type(3) > div");
+var fieldCircle = document.querySelector("main > section.football-field > div:nth-of-type(2) > div:nth-of-type(2)");
+var fieldOpinionTop = document.querySelector("main > section.football-field > div:nth-of-type(1) p");
+var fieldOpinionBottom = document.querySelector("main > section.football-field > div:nth-of-type(3) p");
+var fieldGoals = [];
+
+// YOUR OPINION
+var yourOpinion = document.querySelector("main > section.your-opinion");
+var yourOpinionBG = document.querySelector("main > section.your-opinion > div");
 
 
 
@@ -92,12 +112,12 @@ function permission () {
                     var goalBottomHeight = goalBottom.getBoundingClientRect().height;
                     var goalBottomPositionYAndHeight = goalBottomPositionY + goalBottomHeight;
                     var goalBottomPositionYAndBallCorrection = goalBottomPositionYAndHeight - ballDiameter;
+                    // console.log(goalBottomPositionYAndHeight)
 
                     // GOAL TOP
                     if (positionX > goalTopPositionX && positionX < goalTopPositionXAndBallCorrection) {
-
                         // TOP COLLISION
-                        if (positionY < goalTopPositionY && positionY <= (goalTopPositionYAndHeight + ballDiameter)) {
+                        if (positionY < goalTopPositionY && goalBottomPositionYAndHeight > positionY) {
                             // ADD CLASS TO PARENT
                             footballField.classList.add("scored");
                             footballField.classList.add("scored-top");
@@ -115,10 +135,8 @@ function permission () {
                         }
                     }
                     
-
                     // GOAL BOTTOM
                     if (positionX > goalBottomPositionX && positionX < goalBottomPositionXAndBallCorrection) {
-
                         // BOTTOM COLLISION
                         if (positionY > goalBottomPositionY && positionY <= (goalBottomPositionYAndHeight + ballDiameter)) {
                             // ADD CLASS TO PARENT
@@ -137,22 +155,64 @@ function permission () {
                             console.log("GOAALLL | Bottom goal");                            
                         }
                     }
+
+                    // CIRCLE (MIDDLE OF FIELD)
+                    var fieldCircleRadius = fieldCircle.getBoundingClientRect().width;
+                    var fieldCircleX = fieldCircle.getBoundingClientRect().left;
+                    var fieldCircleXAndRadius = fieldCircleX + fieldCircleRadius;
+                    var fieldCircleY = fieldCircle.getBoundingClientRect().top;
+                    var fieldCircleYAndRadius = fieldCircleY + fieldCircleRadius;
                     
+                    // CHECK IF SCORED AND IF BALL IS IN CIRCLE
+                    if (footballField.classList.contains("scored")) {
+                        if ((positionX > fieldCircleX && positionX < (fieldCircleXAndRadius - ballDiameter)) && (positionY > fieldCircleY && positionY < (fieldCircleYAndRadius - ballDiameter))) {
+                            footballField.classList.add("kick-off");
 
+                            // COUNT UPWARDS (PROGRESSING DELAY)
+                            fieldCircleTimer += 1;
 
-                    
+                            // IF BALL IS IN CIRCLE FOR OVER A SECOND
+                            if (fieldCircleTimer > 150) {
+                                footballField.classList.add("kick-off-approved");
+                                
+                                // CHANGE OPINIONS
+                                setTimeout(() => {
+                                    if (footballField.classList.contains("scored-bottom")) {
+                                        fieldOpinionTop.textContent = shortOpnions[2];
+                                        fieldOpinionBottom.textContent = shortOpnions[3];
+                                    } else {
+                                        fieldOpinionTop.textContent = shortOpnions[1];
+                                        fieldOpinionBottom.textContent = shortOpnions[3];
+                                    }
+                                    if (footballField.classList.contains("scored-top")) {
+                                        footballField.classList.add("score-overview");
+                                        yourOpinion.classList.add("visible");
+                                    }
+                                }, "2500");
 
+                                // CHANGE FIELD & RESET GOALS
+                                setTimeout(() => {
+                                    footballField.classList.remove("kick-off-approved");
+                                    footballField.classList.remove("kick-off");
+                                    footballField.classList.remove("scored");
+                                    footballField.classList.remove("scored-bottom");
+                                    footballField.classList.remove("scored-top");
+                                }, "5500");
+                            }
+                        } else {
+                            footballField.classList.remove("kick-off");
+                            fieldCircleTimer = 0;
+                        }  
+                    }
 
-                    // CHECK BOUNDS
+                    // CHECK BOUNDARIES (SCREEN)
                     checkFieldBounds();
 
+                    // CHANGE POSTION OF BALL
                     ball.style.left = positionX + 'px';
                     ball.style.top = positionY + 'px';
-                    
-
                     console.log("Balpositie X: " + positionX);
                     console.log("Balpositie Y: " + positionY);
-                    // console.log(gravity);
                     
                     // CHECK IF BALL IS NEAR BORDERS OF FIELD / SCREEN 
                     function checkFieldBounds() {
@@ -315,22 +375,44 @@ function permission () {
                     // var yep = ((rotateX * rotateX) * 0.003) * 2;
                     // landingLogo.style.transform = "translateY(" + yep + "vh)";
 
-                    var landingLogoOpacityData = rotateX / landingSnapPoint;
-                    var landingLogoOpacity = 100 - (landingLogoOpacityData * 100);
+                    var landingLogoOpacityData = (rotateX / landingSnapPoint);
+                    var landingLogoOpacity = 100 - (landingLogoOpacityData * (rotateX * rotateX) / 40);
+                    var landingLogoMoveDown = 0 + (landingLogoOpacityData * (rotateX * rotateX) / 40);
+                    var landingLogoRotateBackwards = 0 + (landingLogoOpacityData * (rotateX * rotateX) / 100);
+                    var landingH3MoveDown = landingLogoMoveDown * 0.25;
+                    var landingH3Opacity = landingLogoOpacity - 15;
+                    var landingPMoveDown = landingLogoMoveDown * 0.15;
+                    var landingPOpacity = landingLogoOpacity - 25;
 
                     landingLogo.style.opacity = landingLogoOpacity + "%";
-                    // console.log(landingLogoOpacity);
+                    landingLogo.style.transform = "translateY(" + landingLogoMoveDown + "px) rotateX(" + landingLogoRotateBackwards + "deg)";
+                    landingH3.style.opacity = landingH3Opacity + "%";
+                    landingH3.style.transform = "translateY(" + landingH3MoveDown + "px)";
+                    landingP.style.opacity = landingPOpacity + "%";
+                    landingP.style.transform = "translateY(" + landingPMoveDown + "px)";
 
 
+                    // MAKE CORRECT SECTION VISIBLE --------------------------------
                     if (rotateX >= landingSnapPoint) {
-                        body.classList.add("tilting-locked");
-                        // body.style.backgroundColor = "white";
-                    } else {
-                        // body.classList.remove("tilting-locked");
-                        // body.style.backgroundColor = "black";
+                        landing.classList.add("hidden");
+
+                        if (!footballField.classList.contains("visible")) {
+                            multipleOpinionsSection.classList.add("visible");
+                        }
+                    } 
+                    if (landing.classList.contains("hidden")) {
+                        if (rotateX < 25) {
+                            body.classList.add("tilting-warning-down");
+                        } else {
+                            body.classList.remove("tilting-warning-down");
+                        }
+                        if (rotateX < 5) {
+                            footballField.classList.add("visible");
+                            multipleOpinionsSection.classList.remove("visible");
+                        }
                     }
 
-                    
+ 
                     // TILTING WARNING (X-ROTATION TO MUCH FOR ACCURATE READING) --------------------------------
                     if (rotateX >= 80) {
                         body.classList.add("tilting-warning");
@@ -346,14 +428,28 @@ function permission () {
                         var multipleOpinionsFullRotation = rotateZ * -0.5;
                         var multipleOpinionsSpecificOffset = multipleOpinionsOffset * multipleOpinionsIndex;
                         var multipleOpinionsSpecificRotation = multipleOpinionsFullRotation + multipleOpinionsSpecificOffset;
-                        multipleOpinions[i].style.transform = "translateZ(100vw) rotateY(" + multipleOpinionsSpecificRotation + "deg) translateZ(100vw) rotateX(180deg) rotateZ(180deg)";
-                        
+                        var multipleOpinionsSpecificRotationX = 185 + ((rotateXRounded * rotateXRounded) * -0.001);
+                        multipleOpinions[i].style.transform = "translateZ(100vw) rotateY(" + multipleOpinionsSpecificRotation + "deg) translateZ(100vw) rotateX(" + multipleOpinionsSpecificRotationX + "deg) rotateZ(180deg)";
+                        // multipleOpinions[i].style.transform = "translateZ(100vw) rotateY(" + multipleOpinionsSpecificRotation + "deg) translateZ(100vw) rotateX(180deg) rotateZ(180deg)";
+
                         // BACKGROUND PATTERN PARALLAX EFFECT
                         var multipleOpinionsBGPositionX = (rotateZRounded / 360) * -100;
                         var multipleOpinionsBGPositionY = (rotateXRounded / 180) * -12.5;
                         multipleOpinionsBG[i].style.backgroundPosition = multipleOpinionsBGPositionX + "% " + multipleOpinionsBGPositionY + "%";
                         // console.log("BG Pattern: (X)" + multipleOpinionsBGPositionX + " (Y) " + multipleOpinionsBGPositionY);
                     }
+
+
+                    // LANDING BACKGROUND --------------------------------
+                    var landingBGPositionX = (rotateZRounded / 360) * -100;
+                    var landingBGPositionY = (rotateXRounded / 180) * -25;
+                    landingBG.style.backgroundPosition = landingBGPositionX + "% " + landingBGPositionY + "%";
+
+
+                    // YOUR OPINION BACKGROUND --------------------------------
+                    var yourOpinionBGPositionX = (rotateZRounded / 360) * -100;
+                    var yourOpinionBGPositionY = (rotateXRounded / 180) * -25;
+                    yourOpinionBG.style.backgroundPosition = yourOpinionBGPositionX + "% " + yourOpinionBGPositionY + "%";
  
                     
 
@@ -367,10 +463,14 @@ function permission () {
 }
 
 
+// REFRESH PAGE ON BUTTON CLICK
+function refreshPage(){
+    window.location.reload();
+} 
+
 // REQUEST SENSOR PERMISSION ON BUTTON CLICK 
 var permissionRequestButton = document.querySelector("main > section.sensors-permission-overlay button");
 permissionRequestButton.addEventListener( "click", permission);
-
 
 // GET USER INFO (IPHONE ONLY)
 var authorORUser = document.querySelector("main > section.sensors-permission-overlay strong");

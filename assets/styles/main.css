@@ -1,5 +1,5 @@
 /* VARIABLES -------------------------------- */
-/* VARIABLESdd -------------------------------- */
+/* VARIABLES -------------------------------- */
 :root {
     --font-headings: 'Qatar2022', sans-serif;
     --font-regular: 'Outfit', sans-serif;
@@ -78,21 +78,9 @@ body.tilting-locked {
     /* background-image: linear-gradient(135deg, rgba(41,2,22,1) 0%, rgba(150,15,48,1) 100%); */
     background-size: 500%;
 }
-
-/* body::after {
-    content: '';
-    position: absolute;
-    left: 0;
-    top: 0;
-    height: 2.5em;
-    width: 2.5em;
-    background-color: rgb(0 0 0 / 0.15);
-    border: 3px solid rgb(0 0 0 / 0.075);
-    border-radius: 50%;
-    z-index: 1000;
-} */
-
-
+h1 {
+    visibility: hidden;
+}
 main {
     position: relative;
     height: 100%;
@@ -111,15 +99,18 @@ main > section:nth-of-type(1) {
     position: relative;
     height: 100%;
     width: 100%;
-
-    display: none; /* TIJDELIJK */
+    text-align: center;
+    z-index: 999;
 }
-body.tilting-locked main > section:nth-of-type(1) {
-    display: none;
+main > section:nth-of-type(1).hidden {
+    opacity: 0;
+    visibility: hidden;
 }
 main > section:nth-of-type(1) figure {
     display: grid;
     place-items: center;
+    transform-style: preserve-3d;
+    perspective: 100vw;
 }
 main > section:nth-of-type(1) figure img:first-of-type {
     width: 6em;
@@ -127,6 +118,34 @@ main > section:nth-of-type(1) figure img:first-of-type {
 main > section:nth-of-type(1) figure img:last-of-type {
     margin-top: 2em;
     width: 13em;
+}
+main > section:nth-of-type(1) h3 {
+    margin-top: 4.5em;
+    padding: 0 1.5em;
+    font-family: var(--font-headings);
+    font-size: 1.25em;
+    font-weight: 600;
+}
+main > section:nth-of-type(1) p {
+    margin-top: 1em;
+    padding: 0 1.5em;
+    font-size: 1em;
+    font-weight: 400;
+    line-height: 1.5em;
+}
+main > section:nth-of-type(1) div {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 100%;
+    width: 100%;
+    background-image: url('../branding/qatar-pattern-black.svg');
+    background-size: 10%;
+    background-repeat: repeat;
+    background-position: 0% 0%;
+    opacity: 0.075;
+    z-index: -1;
 }
 
 
@@ -140,11 +159,18 @@ main > section.multiple-opinions {
     height: 100%;
     width: 100%;
     overflow: hidden;
-    opacity: 0;
     transition: 1s;
+    z-index: 998;
+    opacity: 0;
+    visibility: hidden;
 }
-body.tilting-locked main > section.multiple-opinions {
+main > section.multiple-opinions.visible {
     opacity: 1;
+    visibility: visible;
+}
+main > section.multiple-opinions.hidden {
+    opacity: 0;
+    visibility: hidden;
 }
 main > section.multiple-opinions ul {
     list-style: none;
@@ -153,7 +179,7 @@ main > section.multiple-opinions ul {
     display: grid;
     place-items: center;
     height: 97.5%;
-    perspective: 175vw; /* THE UL IS THE 3D ENVIRONMENT > SMALLER NUMBER ==  GREATER PERSPECTIVE EFFECT */
+    perspective: 200vw;
     transform-style: preserve-3d;
 }
 main > section.multiple-opinions ul li {
@@ -165,6 +191,7 @@ main > section.multiple-opinions ul li {
     background-color: rgb(0 0 0 / 0.175);
     border: 0.25em solid rgb(0 0 0 / 0.05);
     overflow: hidden;
+    backface-visibility: hidden;
 }
 main > section.multiple-opinions ul li::after {
     content: '';
@@ -173,10 +200,28 @@ main > section.multiple-opinions ul li::after {
     bottom: 0;
     height: 100%;
     width: 100%;
-    background-image: url('../images/test.svg');
+    background-image: url('../images/illustratie-1.svg');
     background-size: 95%;
     background-repeat: no-repeat;
     background-position: 42.5% 95%;
+}
+main > section.multiple-opinions ul li:nth-of-type(3):after,
+main > section.multiple-opinions ul li:nth-of-type(7):after {
+    background-image: url('../images/illustratie-2.svg');
+    background-size: 95%;
+    background-position: 42.5% 95%;
+}
+main > section.multiple-opinions ul li:nth-of-type(2):after,
+main > section.multiple-opinions ul li:nth-of-type(6):after {
+    background-image: url('../images/illustratie-3.svg');
+    background-size: 90%;
+    background-position: 50% 95%;
+}
+main > section.multiple-opinions ul li:nth-of-type(1):after,
+main > section.multiple-opinions ul li:nth-of-type(5):after {
+    background-image: url('../images/illustratie-4.svg');
+    background-size: 95%;
+    background-position: 50% 95%;
 }
 main > section.multiple-opinions ul li h2 {
     font-family: var(--font-headings);
@@ -189,8 +234,10 @@ main > section.multiple-opinions ul li p {
     font-weight: 400;
     line-height: 1.5em;
 }
+main > section.multiple-opinions ul li p strong {
+    font-weight: 700;
+}
 main > section.multiple-opinions ul li div {
-    content: '';
     position: absolute;
     left: 0;
     top: 0;
@@ -221,7 +268,8 @@ main > section.multiple-opinions section img {
     transition: 450ms;
     transition-delay: 450ms;
 }
-body.tilting-warning main > section.multiple-opinions section img {
+body.tilting-warning main > section.multiple-opinions section img,
+body.tilting-warning-down main > section.multiple-opinions section img {
     opacity: 0;
     transition-delay: 0;
 }
@@ -231,11 +279,11 @@ main > section.multiple-opinions section p {
     opacity: 0;
     transition: 450ms;
 }
-body.tilting-warning main > section.multiple-opinions section p {
+body.tilting-warning main > section.multiple-opinions section p:first-of-type,
+body.tilting-warning-down main > section.multiple-opinions section p:last-of-type {
     opacity: 1;
     transition-delay: 950ms;
 }
-
 
 
 /* FOOTBALL FIELD (FINALS) OF THOUGHTS / OPINIONS -------------------------------- */
@@ -251,18 +299,67 @@ main > section.football-field {
     justify-content: center;
     align-items: center;
     overflow: hidden;
-    opacity: 1;
-    transition: 1s;
-} 
-body.tilting-locked main > section.football-field {
     opacity: 0;
+    visibility: hidden;
+    transition: 1s;
+    z-index: 997;
+} 
+main > section.football-field.visible {
+    opacity: 1;
+    visibility: visible;
+}
+main > section.football-field.score-overview {
+    opacity: 0;
+}
+main > section.football-field.scored.kick-off-approved {
+    animation-name: field-zoom-out-in;
+    animation-duration: 4.5s;
+    animation-delay: 1s;
+    animation-iteration-count: 1;
+    animation-timing-function: ease;
+    animation-fill-mode: forwards;
 }
 main > section.football-field > div {
     width: 100%;
 }
 main > section.football-field > div:nth-of-type(1),
 main > section.football-field > div:nth-of-type(3) {
+    display: grid;
+    place-items: end;
     height: 100%;
+    width: 95%;
+    z-index: -1;
+}
+main > section.football-field > div:nth-of-type(3) {
+    place-items: start;
+}
+main > section.football-field > div:nth-of-type(1) p {
+    margin-bottom: 7.5%;
+    padding: 0.65em 1em;
+    font-size: 0.95em;
+    text-align: center;
+    line-height: 1.35em;
+    background-color: rgb(0 0 0 / 0.175);
+    border: 0.25em solid rgb(0 0 0 / 0.025);
+    border-bottom: none;
+    border-radius: 1.5em 1.5em 0 0;
+    transition: 350ms;
+}
+main > section.football-field > div:nth-of-type(3) p {
+    margin-top: 7.5%;
+    padding: 0.65em 1em;
+    font-size: 0.95em;
+    text-align: center;
+    line-height: 1.35em;
+    background-color: rgb(0 0 0 / 0.175);
+    border: 0.25em solid rgb(0 0 0 / 0.025);
+    border-top: none;
+    border-radius: 0 0 1.5em 1.5em;
+    transition: 350ms;
+}
+main > section.football-field.scored-bottom > div:nth-of-type(1) p,
+main > section.football-field.scored-top > div:nth-of-type(3) p {
+    color: var(--color-white-ish);
 }
 /* FIELD */
 main > section.football-field > div:nth-of-type(2) {
@@ -300,7 +397,8 @@ main > section.football-field > div:nth-of-type(2)::after {
     width: 106.5%;
     background-color: rgb(0 0 0 / 0.175);
     border: 0.25em solid rgb(0 0 0 / 0.025);
-    border-radius: 0.85em;
+    border-top: none;
+    border-bottom: none;
     transform: translate(-50%, -50%);
     z-index: -1;
 }
@@ -350,6 +448,12 @@ main > section.football-field > div:nth-of-type(2) > div:nth-of-type(1) > div {
 main > section.football-field.scored-top > div:nth-of-type(2) > div:nth-of-type(1) > div {
     border: 0.1em solid var(--color-green);
     border-bottom: none;
+    animation-name: scored-goal-top, scored-goal-top-pulse;
+	animation-duration: 1s, 3s;
+	animation-iteration-count: 1, infinite;
+	animation-timing-function: ease;
+    animation-delay: 1s, 2s;
+    animation-fill-mode: forwards, none;
 }
 main > section.football-field > div:nth-of-type(2) > div:nth-of-type(1) > span {
     position: absolute;
@@ -382,9 +486,22 @@ main > section.football-field > div:nth-of-type(2) > div:nth-of-type(2) {
     border: 0.1em solid var(--color-white-ish);
     border-radius: 50%;
     transform: translate(-50%, -50%);
+    transition: 350ms;
 }
 main > section.football-field.scored > div:nth-of-type(2) > div:nth-of-type(2) {
+    border: 0.1em solid var(--color-white);
+}
+main > section.football-field.scored.kick-off > div:nth-of-type(2) > div:nth-of-type(2) {
+    animation-name: pulse-circle-approved;
+	animation-duration: 3s;
+	animation-iteration-count: 1;
+	animation-timing-function: linear;
+    animation-fill-mode: forwards;
+}
+main > section.football-field.scored.kick-off-approved > div:nth-of-type(2) > div:nth-of-type(2) {
     border: 0.1em solid var(--color-green);
+    background-color: rgb(0 255 0 / 0.1);
+    animation-name: none;
 }
 main > section.football-field > div:nth-of-type(2) > div:nth-of-type(2)::before {
     content: '';
@@ -396,6 +513,28 @@ main > section.football-field > div:nth-of-type(2) > div:nth-of-type(2)::before 
     background-color: var(--color-white-ish);
     border-radius: 50%;
     transform: translate(-50%, -50%);
+    transition: 350ms;
+}
+main > section.football-field.scored > div:nth-of-type(2) > div:nth-of-type(2)::before {
+    background-color: var(--color-white);
+}
+main > section.football-field > div:nth-of-type(2) > div:nth-of-type(2)::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 100%;
+    width: 100%;
+    border-radius: 50%;
+    animation-name: pulse-circle;
+	animation-duration: 3.5s;
+	animation-iteration-count: infinite;
+	animation-timing-function: ease;
+    animation-play-state: paused;
+    z-index: -1;
+} 
+main > section.football-field.scored > div:nth-of-type(2) > div:nth-of-type(2)::after {
+    animation-play-state: running;
 }
 /* GOAL SECTION BOTTOM */
 main > section.football-field > div:nth-of-type(2) > div:nth-of-type(3) {
@@ -444,6 +583,12 @@ main > section.football-field > div:nth-of-type(2) > div:nth-of-type(3) > div {
 main > section.football-field.scored-bottom > div:nth-of-type(2) > div:nth-of-type(3) > div {
     border: 0.1em solid var(--color-green);
     border-top: none;
+    animation-name: scored-goal-bottom, scored-goal-bottom-pulse;
+	animation-duration: 1s, 3s;
+	animation-iteration-count: 1, infinite;
+	animation-timing-function: ease;
+    animation-delay: 1s, 2s;
+    animation-fill-mode: forwards, none;
 }
 main > section.football-field > div:nth-of-type(2) > div:nth-of-type(3) > span {
     position: absolute;
@@ -514,8 +659,8 @@ main > section.football-field > div:nth-of-type(2) > span:nth-of-type(4):before 
 /* FOOTBALL */
 #ball {
     position: absolute;
-    left: calc(50% - 10px);
-    top: 15%;
+    left: calc(75% - 10px);
+    top: calc(25% - 10px);
     height: 20px;
 	width: 20px;
     background-color: var(--color-white);
@@ -537,6 +682,105 @@ main > section.football-field > div:nth-of-type(2) > span:nth-of-type(4):before 
     background-position: 0% 0%;
     will-change: transform;
 }
+
+
+
+/* YOUR OPINION -------------------------------- */
+/* YOUR OPINION -------------------------------- */
+main > section.your-opinion {
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 100%;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    opacity: 0;
+    visibility: hidden;
+    transition: 1s;
+    text-align: center;
+    z-index: 1001;
+} 
+main > section.your-opinion.visible {
+    opacity: 1;
+    visibility: visible;
+}
+main > section.your-opinion > div {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 100%;
+    width: 100%;
+    background-image: url('../branding/qatar-pattern-black.svg');
+    background-size: 10%;
+    background-repeat: repeat;
+    background-position: 0% 0%;
+    opacity: 0.075;
+    z-index: -1;
+}
+main > section.your-opinion img {
+    width: 3em;
+}
+main > section.your-opinion h2 {
+    margin-top: 1em;
+    font-family: var(--font-headings);
+    font-size: 2em;
+    font-weight: 600;
+}
+main > section.your-opinion p:first-of-type {
+    margin-top: 1em;
+    padding: 0 1.5em;
+    font-family: var(--font-headings);
+    font-size: 1.15em;
+    font-weight: 600;
+    line-height: 1.5em;
+}
+main > section.your-opinion p:last-of-type {
+    margin-top: 2.5em;
+    padding: 0 2em;
+    font-size: 0.95em;
+    font-weight: 300;
+    opacity: 0.85;
+}
+main > section.your-opinion button {
+    position: relative;
+    display: flex;
+    flex-direction: row;
+    justify-self: flex-end;
+    justify-content: center;
+    align-items: center;
+    margin-top: 2.5em;
+    padding: 1.15em 1.45em;
+    border-radius: 0.75em;
+    background-color: var(--color-white);
+    font-family: var(--font-regular);
+    font-size: 1em;
+    font-weight: 600;
+    color: var(--color-red);
+    border: 3px solid rgb(255 255 255 / 0.035);
+    transition: 350ms;
+    cursor: pointer;
+}
+main > section.your-opinion button:hover {
+    background-color: rgb(255 255 255 / 0.05);
+    border: 3px solid rgb(255 255 255 / 0.045);
+}
+main > section.your-opinion button svg {
+    height: 1.35em;
+    margin-right: 1em;
+}
+main > section.your-opinion button svg path {
+    fill: rgb(255 255 255 / 0.75);
+}
+main > section.your-opinion button span {
+    display: block;
+    width: 100%;
+}
+
 
 
 /* SENSORS PERMISSION OVERLAY -------------------------------- */
@@ -654,6 +898,7 @@ body.sensors-denied main > section.sensors-permission-overlay p:last-of-type {
 
 /* KEYFRAMES -------------------------------- */
 /* KEYFRAMES -------------------------------- */
+/* SENSORS DENIED */
 @keyframes sensors-permission-pulse {
     0%, 100% {
         opacity: 0.35;
@@ -661,4 +906,82 @@ body.sensors-denied main > section.sensors-permission-overlay p:last-of-type {
     50% {
         opacity: 1;
     }
+}
+
+/* FOOTBALL FIELD */
+@keyframes field-zoom-out-in {
+    0% {
+        transform: scale(1) rotate(0deg);
+    }
+    40%, 50% {
+        transform: scale(0.55) rotate(-180deg);
+    }
+    100% {
+        transform: scale(1) rotate(-360deg);
+    }
+}
+@keyframes pulse-circle {
+	0% {
+	    opacity: 0.65;
+	}
+	80% {
+	    box-shadow: 0 0 0 2.5em var(--color-white);
+	    opacity: 0;
+	}
+	100% {
+	    box-shadow: 0 0 0 0 var(--color-white);
+	    opacity: 0;
+	}
+}
+@keyframes pulse-circle-approved {
+	from {
+        box-shadow: inset 0 0 0 0 rgb(255 255 255 / 0);
+	}
+	to {
+        box-shadow: inset 0 0 0 calc(27.5vw / 2) rgb(255 255 255 / 0.4);
+	}
+}
+@keyframes scored-goal-top {
+	from {
+        border: 0.1em solid var(--color-green);
+        border-bottom: none;
+	}
+	to {
+        border: 0.1em solid var(--color-green);
+        border-bottom: none;
+	}
+}
+@keyframes scored-goal-top-pulse {
+	0%, 100% {
+        border: 0.1em solid var(--color-green);
+        border-bottom: none;
+        background-color: rgb(255 255 255 / 0);
+	}
+	50% {
+        border: 0.1em solid var(--color-white);
+        border-bottom: none;
+        background-color: rgb(255 255 255 / 0.2);
+	}
+}
+@keyframes scored-goal-bottom {
+	from {
+        border: 0.1em solid var(--color-green);
+        border-top: none;
+	}
+	to {
+        border: 0.1em solid var(--color-green);
+        border-top: none;
+	}
+}
+@keyframes scored-goal-bottom-pulse {
+	0%, 100% {
+        border: 0.1em solid var(--color-green);
+        border-top: none;
+        background-color: rgb(255 255 255 / 0);
+	}
+	50% {
+        border: 0.1em solid var(--color-white);
+        border-top: none;
+        background-color: rgb(255 255 255 / 0.2);
+	}
 }
